@@ -3,6 +3,11 @@
     path: "{{mount_place}}"
     state: directory
 
+- name: Create FS
+  filesystem:
+    fstype: "{{type_fs}}"
+    dev: /dev/mapper/vg_striped-lv_striped
+
 - name: Mounting
   mount:
     path: "{{mount_place}}"

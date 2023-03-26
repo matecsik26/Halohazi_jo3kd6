@@ -3,10 +3,11 @@
   hosts: servera
   become: yes
   vars:
-    package: python-systemd
+    package: policycoreutils
     mount_place: /data/speci
     type_fs: "ext4"
   roles:  
     - package
     - journald
     - raid
+    - fstab
