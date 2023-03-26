@@ -10,7 +10,6 @@
   with_items:
    - /dev/sdc
    - /dev/sdd
-   
   loop_control:
    loop_var: device
 
