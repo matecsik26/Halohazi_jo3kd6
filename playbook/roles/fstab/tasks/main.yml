@@ -1,0 +1,24 @@
+- name: Mount Place
+  file:
+    path: "{{mount_place}}"
+    state: directory
+
+- name: Mounting
+  mount:
+    path: "{{mount_place}}"
+    src:  /dev/mapper/vg_striped-lv_striped
+    fstype: "{{type_fs}}"
+    opts: defaults
+    state: mounted
+
+
+- name: UUID for fstab
+  raw: blkid -s UUID -o value /dev/mapper/vg_striped-lv_striped
+  register: blkid_output
+
+- name: Add entry to fstab
+  lineinfile:
+    path: /etc/fstab
+    line: "UUID={{ blkid_output.stdout }} {{ mount_place }} {{type_fs}} defaults 0 0"
+    state: present
+

@@ -1,0 +1,28 @@
+- name: Physical V
+  parted:
+   device: "{{device}}"
+   number: 1
+   name: "vg_striped"
+   state: present
+   unit: MiB
+   label: gpt
+   part_end: 100%
+  with_items:
+   - /dev/vdb
+  loop_control:
+   loop_var: device
+
+
+- name: Volume G
+  lvg:
+   vg: "vg_striped"
+   pvs: "{{['/dev/vdb1','/dev/vdb2'] }}"
+   state: present
+
+- name: Logical V
+  raw: lvcreate -L 10M --type striped -i 2 -n lv_striped vg_striped
+
+- name: File Sys for LV
+  filesystem:
+    fstype: "{{type_fs}}"
+    dev: /dev/mapper/vg_striped-lv_striped
